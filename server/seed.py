@@ -50,7 +50,7 @@ def create_meal_plan(users, recipes):
     meal_plans = []
     for _ in range(5):
         mp = MealPlan(
-            date = fake.date_object(),  # Use fake.date_object() for a date object or fake.date() for a date string
+            date = fake.date_object(),
             user_id = rc([user.id for user in users]),
             recipe_id = rc([recipe.id for recipe in recipes])
         )

@@ -49,14 +49,15 @@ D. Delete recipes, meal plans
 
 ### Validations 
 - Add validation to `Recipe` Model
-    - must have `name`, `ingredients`, `directions`
+    - must have `name`, `ingredients`, `directions`, `category_id`
 
 - Add validation to `User`
     - must have `name` 
     - must be string between 1 and 10 characters
 
-- Add validation to `Category` 
-    - must have `appetizer`, `entree`, and `dessert` 
+- Add validation to `MealPlan` 
+    - must have a `date`.
+ 
 
 ### Controllers 
 
@@ -78,6 +79,10 @@ DELETE /meal_plan
 ```
 GET /users
 POST /users
+```
+```
+GET/category 
+POST/category
 ```
 
 ### Serilizers 
