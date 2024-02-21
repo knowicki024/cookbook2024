@@ -80,6 +80,7 @@ DELETE /meal_plan
 GET /users
 POST /users
 ```
+
 ```
 GET/category 
 POST/category
