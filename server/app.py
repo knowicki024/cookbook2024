@@ -5,6 +5,8 @@
 # Remote library imports
 from flask import request, make_response, session 
 from flask_restful import Resource
+from datetime import date
+
 
 # Local imports
 from config import app, db, api
@@ -30,14 +32,14 @@ class Users(Resource):
             )
             db.session.add(new_user)
             db.session.commit()
-            return make_response(new_user.to_dict('-meal_plans',), 201)
+            return make_response(new_user.to_dict(rules=('-meal_plans',)), 201)
         except ValueError:
             return make_response({'error': 'Failed to add a new user, try again'}, 400)
 
 
 class Categories(Resource):
     def get(self):
-        categories = [category.to_dict() for category in Category.query.all()]
+        categories = [category.to_dict(rules=('-recipes',)) for category in Category.query.all()]
         return make_response(categories, 200)
     
     def post(self):
@@ -48,14 +50,14 @@ class Categories(Resource):
                 )
             db.session.add(new_category)
             db.session.commit()
-            return make_response(new_category.to_dict(), 201)
+            return make_response(new_category.to_dict(rules=('-recipes',)), 201)
         except ValueError:
             return make_response({'error': 'Failed to add new category'}, 404)
     
 
 class Recipes(Resource):
     def get(self):
-        recipes = [recipes.to_dict() for recipe in Recipe.query.all()]
+        recipes = [recipe.to_dict() for recipe in Recipe.query.all()]
         return make_response(recipes, 200)
     
     def post(self):
@@ -78,7 +80,7 @@ class RecipeById(Resource):
     def get(self, id):
         recipe = Recipe.query.filter(Recipe.id == id).first()
         if recipe:
-            return make_response(Recipe.to_dict(), 200)
+            return make_response(recipe.to_dict(), 200)
         return make_response({'error': 'Recipe not found'}, 404)
     
     def patch(self, id):
@@ -104,7 +106,7 @@ class RecipeById(Resource):
         return make_response({'error':'recipe not found'}, 404)
     
 
-class MealPlan(Resource):
+class MealPlans(Resource):
     def get(self):
         meal_plans = [mp.to_dict() for mp in MealPlan.query.all()]
         return make_response(meal_plans, 200)
@@ -112,8 +114,9 @@ class MealPlan(Resource):
     def post(self):
         try:
             data=request.get_json()
+            date_obj = date.fromisoformat(data['date'])
             new_mp = MealPlan(
-               date = data['date'],
+               date = date_obj,
                user_id = data['user_id'],
                recipe_id = data['recipe_id'], 
             )
@@ -135,6 +138,8 @@ class MealPlanById(Resource):
         if mp_inst:
             try:
                 data = request.get_json()
+                if 'date' in data:
+                    data['date'] = date.fromisoformat(data['date'])
                 for attr in data:
                     setattr(mp_inst, attr, data[attr])
                 db.session.commit()
@@ -152,12 +157,13 @@ class MealPlanById(Resource):
                 
 
 
-api.add_resource(User, '/users')
-api.add_resource(Category, '/category')
-api.add_resource(Recipe, '/recipes')
+api.add_resource(Users, '/users')
+api.add_resource(Categories, '/categories')  # Note: Changed to plural to match class name and typical REST conventions.
+api.add_resource(Recipes, '/recipes')
 api.add_resource(RecipeById, '/recipes/<int:id>')
-api.add_resource(MealPlan, '/meal_plan')
-api.add_resource(MealPlanById, '/meal_plan/<int:id>')
+api.add_resource(MealPlans, '/meal_plans')  # Assuming you rename MealPlan to MealPlans to keep naming consistent.
+api.add_resource(MealPlanById, '/meal_plans/<int:id>')
+
 
 
 
