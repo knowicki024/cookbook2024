@@ -62,10 +62,17 @@ D. Delete recipes, meal plans
 ### Controllers 
 
 ```
+GET /users
+POST /users
+```
+```
+GET/category 
+POST/category
+```
+```
 GET /recipes
 POST /recipes 
-```
-```
+
 GET /recipes/<int:id>
 PATCH /recipes<int:id>
 DELETE /recipes/<int:id>
@@ -73,18 +80,11 @@ DELETE /recipes/<int:id>
 ```
 GET /meal_plan
 POST /meal_plan 
-PATCH /meal_plan 
-DELETE /meal_plan 
-``` 
-```
-GET /users
-POST /users
-```
 
-```
-GET/category 
-POST/category
-```
+GET/meal_plan/<int:id>
+PATCH /meal_plan/<int:id> 
+DELETE /meal_plan/<int:id>  
+``` 
 
 ### Serilizers 
 
@@ -115,9 +115,10 @@ POST/category
 
 Stretch Goals:
 
-- Full Crud for all Models and Components
+- Full CRUD for all Models and Components
 - Social Media Application 
 - Add more models and components
+- Create tests for application
 
 
 ## Keep Track of Progress:
