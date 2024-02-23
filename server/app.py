@@ -15,10 +15,6 @@ from models import User, Category, Recipe, MealPlan
 
 # Views go here!
 
-@app.route('/')
-def index():
-    return '<h1>Project Server</h1>'
-
 class Users(Resource):
     def get(self):
         users = [user.to_dict(rules=('-meal_plans',)) for user in User.query.all()]
@@ -158,15 +154,15 @@ class MealPlanById(Resource):
 
 
 api.add_resource(Users, '/users')
-api.add_resource(Categories, '/categories')  # Note: Changed to plural to match class name and typical REST conventions.
+api.add_resource(Categories, '/categories')
 api.add_resource(Recipes, '/recipes')
 api.add_resource(RecipeById, '/recipes/<int:id>')
-api.add_resource(MealPlans, '/meal_plans')  # Assuming you rename MealPlan to MealPlans to keep naming consistent.
+api.add_resource(MealPlans, '/meal_plans')  
 api.add_resource(MealPlanById, '/meal_plans/<int:id>')
 
 
 
 
 if __name__ == '__main__':
-    app.run(port=5555, debug=True)
+    app.run(port=8888, debug=True)
 
